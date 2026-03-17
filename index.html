@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FM NUSANTARA · Sistem Registrasi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #03050a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 1200px;
+            width: 100%;
+            background: #0b101a;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        /* ========== BANNER FOTO ========== */
+        .banner {
+            width: 100%;
+            height: 340px;
+            /* ===== GANTI URL FOTO DISINI ===== */
+            background-image: url('https://cdn.jsdelivr.net/gh/ELLIADOR/FOTO-FM-NUSANTARA1@main/1773671605889.png');
+            background-size: cover;
+            background-position: center 30%;
+            background-repeat: no-repeat;
+            position: relative;
+            border-bottom: 1px solid #1e2f40;
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(2,8,15,0.3) 0%, rgba(5,12,25,0.85) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px 40px;
+        }
+
+        .banner-text {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 15px rgba(0,40,80,0.9);
+        }
+
+        .banner-text small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #a0b8d0;
+            display: block;
+            margin-top: 8px;
+        }
+
+        /* ========== BORDER ATAS DENGAN TEKS ========== */
+        .top-border {
+            background: #0f1a2b;
+            padding: 16px 24px;
+            border-bottom: 1px solid #1f3b5c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .border-text {
+            color: #c9dff2;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .border-text span {
+            color: #5f9cf0;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94b9e8;
+            font-size: 0.9rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: #2f95f0;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #2f95f0;
+        }
+
+        /* ========== HALAMAN ========== */
+        .page {
+            transition: 0.3s;
+        }
+
+        .hidden-page {
+            display: none;
+        }
+
+        /* ========== HALAMAN HOME ========== */
+        .home-content {
+            padding: 50px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, #0b1320 0%, #070d18 100%);
+        }
+
+        .title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #b0d0ff, #7fb5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            text-shadow: 0 0 30px #1f4b99;
+        }
+
+        .subtitle {
+            color: #8ea9cc;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #1f3d65;
+            padding-bottom: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ===== TOMBOL REGISTRASI - SUDAH DIGESER KE KIRI ===== */
+        .btn-register {
+            background: linear-gradient(145deg, #1e3f6b, #123159);
+            border: 1px solid #3a6aad;
+            padding: 18px 70px;
+            border-radius: 60px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 10px 25px -5px #0a1a35;
+            margin-top: 20px;
+            border: none;
+            /* GESER 80PX KE KIRI */
+            margin-left: -30px;
+            /* Atau pakai transform: translateX(-300px); */
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(145deg, #234e82, #163b68);
+            transform: translateY(-2px);
+            box-shadow: 0 18px 35px -5px #0f2848;
+        }
+
+        /* ========== HALAMAN REGISTRASI ========== */
+        .registrasi-content {
+            padding: 40px;
+            background: linear-gradient(180deg, #0b1320 0%, #070d18 100%);
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            color: #e2efff;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #6f95cf;
+            border-bottom: 1px solid #1f3d6b;
+            padding-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #aac4ed;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: #0f1b30;
+            border: 1px solid #29446b;
+            border-radius: 16px;
+            font-size: 1rem;
+            color: white;
+            transition: 0.2s;
+        }
+
+        textarea {
+            border-radius: 20px;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #3f7bc0;
+            outline: none;
+            background: #13243f;
+            box-shadow: 0 0 0 3px #1f4170;
+        }
+
+        .btn-submit {
+            background: #164079;
+            border: 1px solid #3973cf;
+            padding: 16px 40px;
+            border-radius: 40px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px #0a1f3f;
+            width: 100%;
+            margin: 20px 0;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background: #1b4f94;
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid #2f5585;
+            padding: 12px 30px;
+            border-radius: 40px;
+            color: #9bb9ec;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 15px;
+            font-size: 1rem;
+            background: none;
+        }
+
+        .btn-back:hover {
+            background: #142c4a;
+            border-color: #4d7ec9;
+            color: white;
+        }
+
+        .notification {
+            margin: 20px 0;
+            padding: 14px 20px;
+            border-radius: 50px;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background: #0f2d35;
+            border: 1px solid #2c9b8f;
+            color: #b7f0e9;
+            display: block;
+        }
+
+        .error {
+            background: #2d1f2b;
+            border: 1px solid #c1616f;
+            color: #ffc1c1;
+            display: block;
+        }
+
+        .database-info {
+            background: #0a1424;
+            border: 1px solid #2d4f84;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin-top: 30px;
+            color: #7f9fd5;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-db {
+            background: #1d314f;
+            border: none;
+            color: #adc6f5;
+            padding: 5px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #7fabec;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #3d608b;
+        }
+
+        .info-footer {
+            margin-top: 60px;
+            color: #4d6d95;
+            font-size: 0.9rem;
+            border-top: 1px dashed #1e3452;
+            padding-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- BANNER FOTO (TETAP ADA DI SEMUA HALAMAN) -->
+        <div class="banner">
+            <div class="banner-overlay">
+                <div class="banner-text">
+                    FM NUSANTARA
+                    <small>Frekuensi Persatuan · Roleplay Nusantara</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- BORDER ATAS DENGAN TEKS (TETAP ADA) -->
+        <div class="top-border">
+            <div class="border-text">
+                <span>⏚</span> SISTEM REGISTRASI ANGGOTA <span>⏚</span>
+            </div>
+            <div class="status-indicator">
+                <span class="dot"></span>
+                <span>Server Online · 95.3 MHz</span>
+            </div>
+        </div>
+
+        <!-- ========== HALAMAN HOME ========== -->
+        <div id="homePage" class="page">
+            <div class="home-content">
+                <h1 class="title">FM NUSANTARA</h1>
+                <div class="subtitle">
+                    Sistem Manajemen Registrasi Terintegrasi
+                </div>
+
+                <!-- TOMBOL REGISTRASI (TEKAN UNTUK PINDAH KE FORM) -->
+                <!-- SUDAH DIGESER 300PX KE KIRI -->
+                <button class="btn-register" onclick="showPage('registrasi')">
+                    📋 REGISTRASI ANGGOTA
+                </button>
+
+                <div class="info-footer">
+                    <p>✦ Database terenkripsi · Notifikasi real-time ✦</p>
+                    <p style="margin-top: 10px; color: #3a6191;">FM NUSANTARA 95.3 MHz</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== HALAMAN REGISTRASI ========== -->
+        <div id="registrasiPage" class="page hidden-page">
+            <div class="registrasi-content">
+                <div class="form-header">
+                    <h2>Formulir Registrasi</h2>
+                    <p>Isi data dengan lengkap untuk bergabung</p>
+                </div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label>📧 Email</label>
+                        <input type="email" id="email" placeholder="nama@domain.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📱 Nomor WhatsApp</label>
+                        <input type="tel" id="wa" placeholder="6281234567890" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🎭 Username OOC</label>
+                        <input type="text" id="ooc" placeholder="Nama asli / panggilan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🎧 Username IC</label>
+                        <input type="text" id="ic" placeholder="Nama karakter roleplay" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📝 Alasan bergabung</label>
+                        <textarea id="alasan" placeholder="Ceritakan motivasi dan ketertarikan Anda..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span id="btnText">KIRIM REGISTRASI</span>
+                        <span id="loadingSpinner" class="loading" style="display: none;"></span>
+                    </button>
+                </form>
+
+                <div id="notification" class="notification"></div>
+
+                <!-- Database Info -->
+                <div class="database-info">
+                    <span>📀 Database: <span id="dbCount">0</span> data tersimpan</span>
+                    <div>
+                        <button class="btn-db" onclick="lihatDatabase()">Lihat</button>
+                        <button class="btn-db" onclick="hapusSemuaData()">Hapus</button>
+                    </div>
+                </div>
+
+                <!-- TOMBOL KEMBALI KE HOME -->
+                <div style="text-align: center;">
+                    <button class="btn-back" onclick="showPage('home')">
+                        ← Kembali ke Beranda
+                    </button>
+                </div>
+
+                <div class="footer">
+                    <p>Data akan dikirim ke admin dan tersimpan di database</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== FUNGSI PINDAH HALAMAN ==========
+        function showPage(page) {
+            const homePage = document.getElementById('homePage');
+            const registrasiPage = document.getElementById('registrasiPage');
+            
+            if (page === 'home') {
+                homePage.classList.remove('hidden-page');
+                registrasiPage.classList.add('hidden-page');
+            } else {
+                homePage.classList.add('hidden-page');
+                registrasiPage.classList.remove('hidden-page');
+                updateDatabaseCount(); // Update jumlah data saat buka form
+            }
+        }
+
+        // ========== KONFIGURASI ==========
+        const NOMOR_ADMIN = '6281252879840'; // GANTI DENGAN NOMOR WA ANDA
+
+        // ========== DATABASE LOCALSTORAGE ==========
+        function getDatabase() {
+            return JSON.parse(localStorage.getItem('fm_registrations') || '[]');
+        }
+
+        function saveToDatabase(data) {
+            let db = getDatabase();
+            db.push({
+                ...data,
+                timestamp: new Date().toISOString(),
+                id: Date.now()
+            });
+            localStorage.setItem('fm_registrations', JSON.stringify(db));
+            updateDatabaseCount();
+        }
+
+        function updateDatabaseCount() {
+            const db = getDatabase();
+            const dbCount = document.getElementById('dbCount');
+            if (dbCount) dbCount.textContent = db.length;
+        }
+
+        function deleteFromDatabase(email) {
+            let db = getDatabase();
+            db = db.filter(reg => reg.email !== email);
+            localStorage.setItem('fm_registrations', JSON.stringify(db));
+            updateDatabaseCount();
+        }
+
+        window.hapusSemuaData = function() {
+            if (confirm('Hapus semua data registrasi?')) {
+                localStorage.removeItem('fm_registrations');
+                updateDatabaseCount();
+                showNotification('Semua data dihapus', 'success');
+            }
+        }
+
+        window.lihatDatabase = function() {
+            console.table(getDatabase());
+            alert('Cek console browser (F12) untuk melihat data');
+        }
+
+        // ========== NOTIFIKASI ==========
+        function showNotification(message, type) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = 'notification ' + type;
+            setTimeout(() => notif.className = 'notification', 4000);
+        }
+
+        // ========== LOADING ==========
+        function setLoading(isLoading) {
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('loadingSpinner');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (btnText) btnText.style.display = isLoading ? 'none' : 'inline';
+            if (spinner) spinner.style.display = isLoading ? 'inline-block' : 'none';
+            if (submitBtn) submitBtn.disabled = isLoading;
+        }
+
+        // ========== KIRIM KE WHATSAPP ==========
+        function sendToWhatsApp(data) {
+            const pesan = `*FM NUSANTARA - PENDAFTARAN BARU*%0A%0A` +
+                         `📧 Email: ${data.email}%0A` +
+                         `📱 WA: ${data.wa}%0A` +
+                         `🎭 OOC: ${data.ooc}%0A` +
+                         `🎧 IC: ${data.ic}%0A` +
+                         `📝 Alasan: ${data.alasan}%0A%0A` +
+                         `⏰ ${new Date().toLocaleString('id-ID')}`;
+            window.open(`https://wa.me/${NOMOR_ADMIN}?text=${pesan}`, '_blank');
+        }
+
+        // ========== FORM SUBMIT ==========
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const data = {
+                    email: document.getElementById('email').value,
+                    wa: document.getElementById('wa').value,
+                    ooc: document.getElementById('ooc').value,
+                    ic: document.getElementById('ic').value,
+                    alasan: document.getElementById('alasan').value
+                };
+
+                // Validasi
+                if (!data.email || !data.wa || !data.ooc || !data.ic || !data.alasan) {
+                    showNotification('Semua kolom harus diisi', 'error'); return;
+                }
+                if (!data.email.includes('@') || !data.email.includes('.')) {
+                    showNotification('Email tidak valid', 'error'); return;
+                }
+
+                setLoading(true);
+
+                try {
+                    // Simpan ke database
+                    saveToDatabase(data);
+                    
+                    // Kirim ke WhatsApp
+                    sendToWhatsApp(data);
+
+                    showNotification('✓ Registrasi berhasil! Data terkirim ke admin', 'success');
+
+                    // Reset form
+                    setTimeout(() => {
+                        document.getElementById('registerForm').reset();
+                        setLoading(false);
+                    }, 2000);
+
+                    // Hapus dari database setelah 10 detik
+                    setTimeout(() => {
+                        deleteFromDatabase(data.email);
+                        console.log('Data dihapus dari database:', data.email);
+                    }, 10000);
+
+                } catch (error) {
+                    showNotification('Error: ' + error.message, 'error');
+                    setLoading(false);
+                }
+            });
+        }
+
+        // Inisialisasi
+        updateDatabaseCount();
+    </script>
+</body>
+  </html>
